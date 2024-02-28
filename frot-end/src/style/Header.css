@@ -1,0 +1,7 @@
+.menu_open:hover {
+    
+    > div {
+        display: flex;
+        flex-flow: column;
+    }
+}
