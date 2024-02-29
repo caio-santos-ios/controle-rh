@@ -2,7 +2,8 @@
   "compilerOptions": {
     "target": "es2016",
     "module": "commonjs",
-    "typeRoots": ["node_modules/@types"],
+    "outDir": "./dist",
+    "typeRoots": ["src/@types", "node_modules/@types"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -12,6 +13,6 @@
     "emitDecoratorMetadata": true,
     "strictPropertyInitialization": false
   },
-  "include": ["src"],
+  "include": ["src", "src/routers/.router.ts"],
   "exclude": ["node_modules"]
 }
