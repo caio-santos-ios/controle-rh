@@ -44,7 +44,7 @@ class Collaborador {
         return findCollaborator // returnCollaborator.parse(findCollaborator)
     }
     
-    update = async (id: string, data: requestCollaboratorUpdate): Promise<responseCollaborator> => {
+    update = async (id: string, data: any): Promise<responseCollaborator> => {
         const myId = Number(id)
 
         const findCollaborator = await prisma.collaborator.findUnique({
@@ -54,6 +54,7 @@ class Collaborador {
         })
 
         if(!findCollaborator) throw new AppErro(404, "Not found")
+        const hashPassword = hash(data.password, 10)
 
         const updateCollaborator = await prisma.collaborator.update({
             where: {
