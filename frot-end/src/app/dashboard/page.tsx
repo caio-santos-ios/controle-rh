@@ -1,5 +1,5 @@
-import { Header } from "@/components/Header"
-import { PointCollaborator } from "@/components/PointCollaborator"
+import { Header } from "@/components/Header";
+import { PointCollaborator } from "@/components/PointCollaborator";
 
 const Dashboard = () => {
 
