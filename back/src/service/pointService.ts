@@ -1,12 +1,25 @@
 import { prisma } from "../database/prisma";
 import { requestPoint, responsePoint, responsePointAll } from "../interfaces/pointInterface";
 import { AppErro } from "../utils/AppErro";
+import { calculetedHour } from "../utils/calculetedHour";
 import { convertDateBrazil } from "../utils/dateBrazil";
 
 class Point {
     create = async (data: any, collaboratorId: number): Promise<responsePoint> => {
         const id = Number(collaboratorId)
+        const day = new Date()
         
+        const findPoint = await prisma.point.findFirst({
+            where: {
+                workDay: day,
+                AND: {
+                    collaboratorId: id
+                }
+            }
+        })
+        
+        if(findPoint) throw new AppErro(400, "Ponto já batido")
+
         await prisma.point.findFirst({
             where: {
                 collaboratorId: data.collaboratorId
@@ -24,8 +37,14 @@ class Point {
         return point
     }
 
-    read = async (): Promise<responsePointAll> => {
-        const points = await prisma.point.findMany()
+    read = async (id: string): Promise<responsePointAll> => {
+        const myId = Number(id)
+
+        const points = await prisma.point.findMany({
+            where: {
+                collaboratorId: myId 
+            }
+        })
 
         return points
     }
@@ -44,7 +63,8 @@ class Point {
         return findPoint
     }
 
-    update = async (id: string, data: requestPoint): Promise<responsePoint> => {
+    update = async (id: string, data: requestPoint): Promise<responsePoint | any> => {
+        /*
         const myId = Number(id)
 
         const findPoint = await prisma.point.findFirst({
@@ -65,6 +85,7 @@ class Point {
         })
 
         return pointUpdate
+        */
     }
 
     destroy = async (id: string): Promise<void> => {
@@ -85,6 +106,29 @@ class Point {
         })
 
         return 
+    }
+
+    fishWordDay = async (): Promise<void> => {
+        const day = new Date()
+        
+        const findPoint = await prisma.point.findFirst({
+            where: {
+                workDay: day,
+            }
+        })        
+
+        if(!findPoint) throw new AppErro(404, "Not found")
+        
+        await prisma.point.update({
+            where: {
+                id: findPoint.id,
+            },
+            data: {
+                onLine: false
+            }
+        })
+        
+        return
     }
 
     hourLunch = async (id: string) => {
@@ -112,8 +156,11 @@ class Point {
             
             return { message: "Parada para almoco" }
         }
+
         const date: any = convertDateBrazil()
+        
         let stopLunch = date - findPoint.lunchTimeStart 
+        
         stopLunch /= (1000 * 60 * 60) 
 
         if(Math.floor(stopLunch) < 1) throw new AppErro(409, "Deve fazer no minino 1 hora de almoço")

@@ -20,20 +20,20 @@ model Collaborator {
   director          Boolean   @default(false)
   hourCharge        Int       @default(8)
   points            Point[]
-  create_at         DateTime  @default(now())
-  update_at         DateTime  @updatedAt
+  create_at         DateTime  @default(now()) @db.Timestamptz(6)
+  update_at         DateTime  @updatedAt      @db.Timestamptz(6)
 
   @@map("collaborators")
 }
 
 model Point {
-  id                  Int       @unique           @default(autoincrement())
-  startHour           DateTime  @default(now())   @db.Timestamp()
-  endHour             DateTime  @updatedAt        @db.Timestamp()
-  onLine              Boolean   @default(true)
-  workDay             DateTime  @default(now())   @db.Date
-  lunchTimeStart      DateTime?    
-  lunchTimeEnd        DateTime?
+  id                  Int         @unique           @default(autoincrement())
+  startHour           DateTime    @default(now())   @db.Timestamp()
+  endHour             DateTime    @updatedAt        @db.Timestamp()
+  onLine              Boolean     @default(true)
+  workDay             DateTime    @unique           @default(now())   @db.Date
+  lunchTimeStart      DateTime?   @db.Timestamptz(6) 
+  lunchTimeEnd        DateTime?   @db.Timestamptz(6)
   collaboratorId      Int
   collaborator        Collaborator @relation(fields: [collaboratorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 

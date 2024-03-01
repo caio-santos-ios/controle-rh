@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "points" ALTER COLUMN "endHour" SET DATA TYPE TIMESTAMP;

@@ -9,7 +9,7 @@ class Point {
     }
 
     read = async (req: Request, res: Response): Promise<Response> => {
-        const points = await servicePoint.read()
+        const points = await servicePoint.read(res.locals.authCollaborator.sub)
 
         return res.status(200).json(points)
     }
@@ -30,6 +30,12 @@ class Point {
         await servicePoint.destroy(req.params.id)
 
         return res.status(204).json()
+    }
+
+    fishWorkDay = async (req: Request, res: Response): Promise<Response> => {
+        await servicePoint.fishWordDay()
+        
+        return res.status(200).json()
     }
 
     hourLunch = async (req: Request, res: Response): Promise<Response> => {

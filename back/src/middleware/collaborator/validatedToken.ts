@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 import { AppErro } from "../../utils/AppErro";
+
 export const validatedToken = (req: Request, res: Response, next: NextFunction): void => {
     const { authorization } = req.headers
 

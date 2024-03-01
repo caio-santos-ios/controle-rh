@@ -1,5 +1,5 @@
 "use client"
-
+import "dotenv/config"
 import { Tlogin } from "@/@types/login";
 import { api } from "@/api/service";
 import { useForm } from "react-hook-form";
@@ -11,6 +11,7 @@ export const Login = () => {
   const router = useRouter()
 
     const login = async (data: Tlogin) => {
+
       try {
         const res = await api.post("/collaborators/login", data)
         setCookie('token', res.data)
